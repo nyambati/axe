@@ -3,6 +3,7 @@ import logging
 import os
 import yaml
 from .tree import tree
+from .route_evaluator import evaluate
 
 # Set up basic logging
 logging.basicConfig(level=logging.INFO)
@@ -15,12 +16,25 @@ def main():
         description="Axe CLI tool for managing and troubleshooting prometheus alertmanager configurations",
     )
     subparsers = parser.add_subparsers()
+
     # Tree command
     tree_parser = subparsers.add_parser(
         "tree", help="Displays alertmanager configuration route tree"
     )
     tree_parser.add_argument("file_path", help="Path to the YAML file")
     tree_parser.set_defaults(func=tree)
+
+    # Evaluate command
+    evaluate_parser = subparsers.add_parser(
+        "eval", help="Evaluates alertmanager configuration route tree"
+    )
+    evaluate_parser.add_argument("file_path", help="Path to the YAML file")
+    evaluate_parser.add_argument("--alert", help="Alert to evaluate")
+    evaluate_parser.add_argument(
+        "--verbose", action="store_true", help="Enable verbose output"
+    )
+    evaluate_parser.set_defaults(func=evaluate)
+
     args = parser.parse_args()
     if hasattr(args, "func"):
         args.func(args)

@@ -1,0 +1,5 @@
+{
+            "severity": "critical",
+            "environment": "production",
+            "alertname": "DiskFull"
+        }
