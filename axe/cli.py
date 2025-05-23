@@ -1,9 +1,8 @@
 import argparse
 import logging
-import os
-import yaml
 from .tree import tree
 from .route_evaluator import evaluate
+from .config_manager import render
 
 # Set up basic logging
 logging.basicConfig(level=logging.INFO)
@@ -34,6 +33,16 @@ def main():
         "--verbose", action="store_true", help="Enable verbose output"
     )
     evaluate_parser.set_defaults(func=evaluate)
+
+    # Config command
+    config_parser = subparsers.add_parser(
+        "render", help="Renders alertmanager configuration"
+    )
+    config_parser.add_argument("file_path", help="Path to the YAML file")
+    config_parser.add_argument(
+        "--verbose", action="store_true", help="Enable verbose output"
+    )
+    config_parser.set_defaults(func=render)
 
     args = parser.parse_args()
     if hasattr(args, "func"):
