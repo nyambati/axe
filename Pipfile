@@ -12,6 +12,7 @@ click = "*"
 ric = "*"
 rich = "*"
 pytest-mock = "*"
+black = "*"
 
 [requires]
 python_version = "3.13"

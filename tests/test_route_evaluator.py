@@ -1,8 +1,4 @@
-import pytest
-from unittest.mock import patch, MagicMock, mock_open
-import yaml
-from axe.route_evaluator import Route, RouteEvaluator, evaluate
-from axe.helpers import parse_alertmanager_config
+from axe.route_evaluator import Route, RouteEvaluator
 
 
 def test_route_matches_alert_exact_match():
@@ -81,64 +77,58 @@ def test_route_evaluator_simple_route():
 def test_route_evaluator_continue_flag():
     """Test route evaluation with continue flag."""
     config = {
-        "global": {"resolve_timeout": "5m"},
-        "route": {
-            "receiver": "default",
-            "continue": True,
-            "routes": [
-                {
-                    "receiver": "email",
-                    "match": {"severity": "critical"},
-                    "continue": True,
-                },
-                {
-                    "receiver": "slack",
-                    "match": {"severity": "warning"},
-                    "continue": True,
-                },
-            ],
-        },
+        "receiver": "default",
+        "group_by": ["alertname"],
+        "continue": True,
+        "routes": [
+            {
+                "receiver": "email",
+                "match": {"severity": "critical"},
+                "continue": True,
+            },
+            {
+                "receiver": "slack",
+                "match": {"severity": "warning"},
+                "continue": True,
+            },
+        ],
     }
-    evaluator = RouteEvaluator(config, verbose=True)
+    evaluator = RouteEvaluator(config)
 
     # Test critical alert with continue
     alert = {"severity": "critical", "alertname": "DiskFull"}
     receivers = evaluator.evaluate_alert(alert)
-    print(receivers)
     assert "default" in receivers  # Default route always matches
-    # assert "email" in receivers  # Email route matches critical alerts
-    assert len(receivers) == 1  # Both default and email routes should match
+    assert "email" in receivers  # Email route matches critical alerts
+    assert len(receivers) == 2  # Both default and email routes should match
 
 
 def test_route_evaluator_complex_route():
     """Test route evaluation with complex nested routes."""
     config = {
-        "global": {"resolve_timeout": "5m"},
-        "route": {
-            "receiver": "default",
-            "continue": True,
-            "routes": [
-                {
-                    "receiver": "email",
-                    "match": {"severity": "critical"},
-                    "continue": True,
-                    "routes": [
-                        {
-                            "receiver": "pagerduty",
-                            "match": {"environment": "production"},
-                            "continue": True,
-                        }
-                    ],
-                },
-                {
-                    "receiver": "slack",
-                    "match": {"severity": "warning"},
-                    "continue": True,
-                },
-            ],
-        },
+        "receiver": "default",
+        "continue": True,
+        "routes": [
+            {
+                "receiver": "email",
+                "match": {"severity": "critical"},
+                "continue": True,
+                "routes": [
+                    {
+                        "receiver": "pagerduty",
+                        "match": {"environment": "production"},
+                        "continue": True,
+                    }
+                ],
+            },
+            {
+                "receiver": "slack",
+                "match": {"severity": "warning"},
+                "continue": True,
+            },
+        ],
     }
-    evaluator = RouteEvaluator(config["route"])
+    evaluator = RouteEvaluator(config)
 
     # Test production critical alert
     alert = {
