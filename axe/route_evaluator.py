@@ -235,6 +235,8 @@ def evaluate(args: argparse.Namespace) -> int:
             with open(args.alert, "r") as f:
                 alert_data_string = f.read().strip()
             alert_labels = json.loads(alert_data_string)
+        else:
+            alert_labels = json.loads(args.alert)
         # Create evaluator and evaluate alert
         evaluator = RouteEvaluator(
             route_data=route_config.get("route", {}), verbose=args.verbose
