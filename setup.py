@@ -6,7 +6,7 @@ setup(
     description="A CLI tool for managing and troubleshooting prometheus alertmanager configurations",
     author="Thomas Nyambati",
     author_email="thomasnyambati@gmail.com",
-    packages=find_packages(),
+    packages=["axe"],
     install_requires=[
         "click>=8.0.0",
         "pyyaml>=6.0.2",
@@ -22,5 +22,5 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    python_requires="3.13",
+    python_requires=">=3.8",
 )

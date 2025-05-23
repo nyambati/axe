@@ -25,7 +25,7 @@ def main():
 
     # Evaluate command
     evaluate_parser = subparsers.add_parser(
-        "eval", help="Evaluates alertmanager configuration route tree"
+        "eval", help="Evaluates alertmanager configuration against a given alert"
     )
     evaluate_parser.add_argument("file_path", help="Path to the YAML file")
     evaluate_parser.add_argument("--alert", help="Alert to evaluate")
