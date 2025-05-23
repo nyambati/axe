@@ -1,9 +1,7 @@
-import pytest
 import os
 import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from axe.tree import parse_alertmanager_config
 from axe.tree import Route, tree
 from rich.tree import Tree
 from unittest.mock import patch, mock_open, MagicMock
@@ -68,7 +66,7 @@ def test_tree_command_success():
     mock_args = MagicMock()
     mock_args.file_path = "test.yaml"
 
-    with patch("builtins.open", mock_open(read_data=config_yaml)) as mock_file:
+    with patch("builtins.open", mock_open(read_data=config_yaml)):
         with patch("axe.tree.print") as mock_print:
             exit_code = tree(mock_args)
             assert exit_code == 0
@@ -95,7 +93,7 @@ def test_tree_command_yaml_error():
     mock_args = MagicMock()
     mock_args.file_path = "invalid.yaml"
 
-    with patch("builtins.open", mock_open(read_data="invalid:yaml")) as mock_file:
+    with patch("builtins.open", mock_open(read_data="invalid:yaml")):
         with patch("axe.tree.print") as mock_print:
             exit_code = tree(mock_args)
             assert exit_code == 1

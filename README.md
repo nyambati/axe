@@ -12,26 +12,30 @@ A command-line interface tool for managing and troubleshooting Prometheus Alertm
 ## Installation
 
 ### Prerequisites
+
 - Python 3.13+
 - pipenv (recommended) or pip
 
 ### Using pipenv (recommended)
 
-1. Clone the repository
-   ```bash
+Clone the repository
+
+```bash
    git clone <repository-url>
    cd axe
-   ```
+```
 
-2. Install dependencies:
-   ```bash
+Install dependencies:
+
+```bash
    pipenv install --dev
-   ```
+```
 
-3. Install the package in development mode:
-   ```bash
+Install the package in development mode:
+
+```bash
    pipenv install -e .
-   ```
+```
 
 ### Using pip
 
